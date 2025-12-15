@@ -101,7 +101,8 @@ public class RobotContainer {
     try {
        //File root = Filesystem.getOperatingDirectory().
        testResults = new BufferedWriter(new FileWriter("experiment.csv"));
-       testResults.write("height, pitch, x, y, heading, output yaw, pitch, area, x, y, heading");
+       testResults.write("height, pitch, x, y, heading, output yaw, pitch, area, x, y, heading, dist");
+       testResults.flush();
     } catch (IOException e) {
       System.out.print("Write experiment results where? Not");
     }
@@ -110,8 +111,8 @@ public class RobotContainer {
   }
 
   double[] dummy = {-999.,-999.,-999.};
-private void printExper() {
-  try {
+  private void printExper() {
+   try {
 
     testResults.write(
       String.format("%5.3f ,",SmartDashboard.getNumber("cameraHeight",-999.))
@@ -127,10 +128,10 @@ private void printExper() {
       +String.format("%5.3f ,",SmartDashboard.getNumberArray("rawT3d",dummy)[2])
       +String.format("%5.3f",SmartDashboard.getNumber("targetDistanceInches",-999.))
     );
-  }catch (IOException e) {
+   }catch (IOException e) {
     System.out.println("Bad write of experiment data!");
+   }
   }
-}
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
