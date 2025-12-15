@@ -402,17 +402,17 @@ public class AprilCamera extends SubsystemBase {
       reefTag = target.getFiducialId()>=17 || (target.getFiducialId()>=6 && target.getFiducialId()<=11);
       //SmartDashboard.putNumber("April Robot Pose X", getPose3d().getX());
       //SmartDashboard.putNumber("April Robot Pose Y", getPose3d().getY());
-      SmartDashboard.putNumber("April Tag X", target.getFiducialId());
-      SmartDashboard.putNumber("Pitch", target.getPitch());
+      SmartDashboard.putNumber("targetID", target.getFiducialId());
+      SmartDashboard.putNumber("targetPitch", target.getPitch());
       SmartDashboard.putNumber("Area Distance", Units.metersToInches(getAreaDistance()));
-      SmartDashboard.putNumber("Area", target.getArea());
-      //SmartDashboard.putNumber("Get Yaw", target.getYaw());
+      SmartDashboard.putNumber("targetArea", target.getArea());
+      SmartDashboard.putNumber("targetYaw", target.getYaw());
       Transform3d rawTrans = target.getBestCameraToTarget();
       aT3d[0]=rawTrans.getX();
       aT3d[1]=rawTrans.getY();
       aT3d[2]=Units.radiansToDegrees(rawTrans.getRotation().getAngle());
       SmartDashboard.putNumberArray("rawT3d",aT3d);
-      SmartDashboard.putNumber("Get Distance Inches ", Units.metersToInches(getDistanceToTarget()));
+      SmartDashboard.putNumber("targetDistanceInches ", Units.metersToInches(getDistanceToTarget()));
       
       
 

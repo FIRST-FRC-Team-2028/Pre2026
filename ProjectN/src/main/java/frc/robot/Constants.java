@@ -280,18 +280,15 @@ public final class Constants {
     public static final int kMechControllerPort =        1; 
     public static final int kMechControllerPort2 =       2;
     //Driver Axis (Includes triggers)
-    public static final int kDriverYAxis =               0;
-    public static final int kDriverXAxis =               1;
-    public static final int kFineControlAxis =           2;
-    public static final int kFastControlAxis =           3;
-    public static final int kDriverRotAxis =             4;
+    public static final int kDriverYAxis =               0;   // left stick sideways
+    public static final int kDriverXAxis =               1;   // left stick for-backward
+    public static final int kFineControlAxis =           2;   // 
+    public static final int kFastControlAxis =           3;   //
+    public static final int kDriverRotAxis =             4;   // right stick sideways
     //Driver Buttons
-    public static final int kResetGyro = 1;
-    public static final int kRightCoralStation = 2;
-    public static final int kLeftCoralStation = 3;
-    public static final int kDriveToBarge = 4;
-    public static final int kpathfindTopCoralStation =   4;
-    public static final int kDriverRobotOrientedButton = 5; //6
+    public static final int kResetGyro                  = 1;    // X
+    public static final int kDriverRobotOrientedButton  = 5;    // leftBumper
+    public static final int STORE_RESULTS               = 4;    // 
 
     //Gamemech Buttons
     public static final int kIntake =                    5;

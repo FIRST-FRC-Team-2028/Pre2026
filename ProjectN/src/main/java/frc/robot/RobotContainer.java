@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.json.simple.parser.ParseException;
 
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.DriveRequestType;
@@ -47,6 +52,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj.Filesystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -64,6 +70,7 @@ public class RobotContainer {
   private final MatchTimer matchTimer;
   private final SendableChooser<Command> autoChooser;
   public boolean algae = false;
+  BufferedWriter testResults;
     
 
   // Joysticks
@@ -90,11 +97,40 @@ public class RobotContainer {
     if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
       
     };
+    
+    try {
+       //File root = Filesystem.getOperatingDirectory().
+       testResults = new BufferedWriter(new FileWriter("experiment.csv"));
+       testResults.write("height, pitch, x, y, heading, output yaw, pitch, area, x, y, heading");
+    } catch (IOException e) {
+      System.out.print("Write experiment results where? Not");
+    }
     // Configure the trigger bindings
     configureButtonBindings();
   }
 
+  double[] dummy = {-999.,-999.,-999.};
+private void printExper() {
+  try {
 
+    testResults.write(
+      String.format("%5.3f ,",SmartDashboard.getNumber("cameraHeight",-999.))
+      +String.format("%5.3f ,",SmartDashboard.getNumber("cameraPitch",-999.))
+      +String.format("%5.3f ,",SmartDashboard.getNumber("cameraX",-999.))
+      +String.format("%5.3f ,",SmartDashboard.getNumber("cameraY",-999.))
+      +String.format("%5.3f ,",SmartDashboard.getNumber("cameraHeading",-999.))
+      +String.format("%5.3f ,",SmartDashboard.getNumber("targetYaw",-999.))
+      +String.format("%5.3f ,",SmartDashboard.getNumber("targetPitch",-999.))
+      +String.format("%5.3f ,",SmartDashboard.getNumber("targetArea",-999.))
+      +String.format("%5.3f ,",SmartDashboard.getNumberArray("rawT3d",dummy)[0])
+      +String.format("%5.3f ,",SmartDashboard.getNumberArray("rawT3d",dummy)[1])
+      +String.format("%5.3f ,",SmartDashboard.getNumberArray("rawT3d",dummy)[2])
+      +String.format("%5.3f",SmartDashboard.getNumber("targetDistanceInches",-999.))
+    );
+  }catch (IOException e) {
+    System.out.println("Bad write of experiment data!");
+  }
+}
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -109,6 +145,9 @@ public class RobotContainer {
   public void configureButtonBindings() {
     CommandScheduler.getInstance().getActiveButtonLoop().clear();
     
+    new JoystickButton(driverJoytick, OIConstants.STORE_RESULTS)
+        .onTrue(new InstantCommand(() -> printExper()
+             ));
     
 
     if (Constants.DRIVE_AVAILABLE) {
