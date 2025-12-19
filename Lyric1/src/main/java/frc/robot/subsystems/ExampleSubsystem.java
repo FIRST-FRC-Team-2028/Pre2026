@@ -190,7 +190,7 @@ public class ExampleSubsystem extends SubsystemBase {
   public Command clDist(DoubleSupplier dist) {
     return runOnce(
         () -> {
-          closedLoop(dist.getAsDouble());
+          closedLoop(dist.getAsDouble()*5.);
         });
   }
 

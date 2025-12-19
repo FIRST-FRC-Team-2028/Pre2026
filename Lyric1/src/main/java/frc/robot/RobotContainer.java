@@ -56,8 +56,8 @@ public class RobotContainer {
     m_driverController.b().whileTrue(m_exampleSubsystem.moveDist());
     m_driverController.a().onTrue(m_exampleSubsystem.moveDist(false));
 
-    // Use rightTrigger to wiggle rollers
-    m_driverController.rightTrigger().onChange(m_exampleSubsystem.clDist(controller::getRightTriggerAxis));
+    // Use rightStick to wiggle rollers while clicked
+    m_driverController.rightStick().whileTrue(m_exampleSubsystem.clDist(controller::getRightY));
   }
 
   /**
