@@ -16,24 +16,32 @@ import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.ResetMode;
+import com.revrobotics.PersistMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
+import frc.robot.SendableRelEncoder;
+import frc.robot.SendableSparkMax;
+import frc.robot.SendableSparkPID;
 
 public class ExampleSubsystem extends SubsystemBase {
-  SparkMax motor;
+  //SparkMax motor;
+  SendableSparkMax motor;
   SparkBaseConfig mConfig;
   RelativeEncoder encoder;
+  SendableRelEncoder msencoder;
   EncoderConfig eConfig;
   SparkClosedLoopController clc;
+  SendableSparkPID msclc;
   double clcTarget;
   ClosedLoopConfig clcc;
   /** Creates a new ExampleSubsystem. */
   public ExampleSubsystem() {
-    motor = new SparkMax(61, SparkLowLevel.MotorType.kBrushless);
+    motor = new SendableSparkMax(61, SparkLowLevel.MotorType.kBrushless);
     mConfig = new SparkMaxConfig();
     mConfig.idleMode(IdleMode.kBrake);
     mConfig.openLoopRampRate(1.8); // seconds to go from 0 to full
@@ -52,8 +60,15 @@ public class ExampleSubsystem extends SubsystemBase {
     mConfig.softLimit.forwardSoftLimit(10.);
     mConfig.softLimit.forwardSoftLimitEnabled(true);
 
-    motor.configure(mConfig, SparkBase.ResetMode.kResetSafeParameters
-                  , SparkBase.PersistMode.kPersistParameters);
+    motor.configure(mConfig, ResetMode.kResetSafeParameters
+                           , PersistMode.kPersistParameters);
+    
+    // make encoder and controller Sendable
+    msclc = new SendableSparkPID(motor);
+    msencoder = new SendableRelEncoder(encoder);
+    addChild("Motor", motor);
+    addChild("Encoder", msencoder);
+    addChild("Controller", msclc);
   }
 
   /** Move motor:
@@ -162,7 +177,7 @@ public class ExampleSubsystem extends SubsystemBase {
   /** closed loop position control to target, inches */
   public void closedLoop(double target) {
     clcTarget = target;
-    clc.setReference(clcTarget, SparkBase.ControlType.kPosition);
+    clc.setSetpoint(clcTarget, SparkBase.ControlType.kPosition);
   }
 
   /** closed loop position control to 4 inches */

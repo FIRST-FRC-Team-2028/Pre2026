@@ -11,6 +11,8 @@ import frc.robot.commands.ExampleDefCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -55,9 +57,17 @@ public class RobotContainer {
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.moveDist());
     m_driverController.a().onTrue(m_exampleSubsystem.moveDist(false));
+    m_driverController.x().onTrue(Commands.runOnce(
+                                          () -> {
+                                                   m_exampleSubsystem.zeroEncoder();
+                                                }
+                                          , m_exampleSubsystem)
+                                  );
 
     // Use rightStick to wiggle rollers while clicked
-    m_driverController.rightStick().whileTrue(m_exampleSubsystem.clDist(controller::getRightY));
+    //m_driverController.rightStick().whileTrue(m_exampleSubsystem.clDist(controller::getRightY));
+    // Use rightTrigger to wiggle rollers
+    m_driverController.rightTrigger().onChange(m_exampleSubsystem.clDist(controller::getRightTriggerAxis));
   }
 
   /**
